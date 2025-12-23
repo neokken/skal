@@ -5,4 +5,7 @@
 #pragma once
 
 // currently no other device types
-#include "platform/sdl3/device_sdl3.h"
+#ifdef SKAL_SDL3
+#include "skal/platform/sdl3/device/device_sdl3.h"
+#endif
+

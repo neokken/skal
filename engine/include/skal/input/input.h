@@ -158,4 +158,4 @@ namespace skal::input
 
 
 // no other platforms yet
-#include "platform/sdl3/input_sdl3.h"
+#include "skal/platform/sdl3/input/input_sdl3.h"

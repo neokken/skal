@@ -1,0 +1,86 @@
+//
+// Created by okker on 22/12/2025.
+//
+
+#pragma once
+#include <variant>
+#include "skal/uuid_types.h"
+
+
+namespace skal
+{
+    class IResource;
+
+    enum class ResourceType
+    {
+        Scene,
+        Texture,
+        Unknown,
+        // Add new types here
+    };
+
+    // Conversion utilities
+    ResourceType ParseResourceType(const std::string& str);
+    std::string ResourceTypeToString(ResourceType type);
+
+
+    struct EmbeddedMetaResource
+    {
+        ResourceUUID uuid;
+        ResourceType resourceType;
+        std::string format;
+        std::string subPath;
+    };
+
+
+    struct MetaFile
+    {
+        ResourceUUID uuid;
+        ResourceType resourceType;
+        std::string format;
+
+        std::vector<EmbeddedMetaResource> embeddedResources;
+
+        std::vector<ResourceUUID> dependents; // Reverse dependencies who are using this
+        std::vector<std::string> external_dependencies_extensions; // list of co-located file extensions with same basename
+    };
+
+    struct PakLocation
+    {
+        std::string pakPath;
+        uint64_t offset;
+        uint64_t size;
+    };
+
+    struct MetaResource
+    {
+        ResourceUUID uuid;
+        ResourceType resourceType;
+        std::string format;
+
+        // Where to load from
+        std::variant<
+            std::string, // File path (editor)
+            ResourceUUID, // Parent UUID (embedded)
+            PakLocation // Pak file (player)
+        > source;
+
+
+        std::vector<EmbeddedMetaResource> embeddedResources;
+        std::vector<ResourceUUID> dependents; // Reverse dependencies who are using this
+        std::vector<std::string> external_dependencies_extensions; // list of co-located file extensions with same basename
+    };
+
+
+    class ResourceFactory
+    {
+    public:
+        static IResource* Create(
+            ResourceType type,
+            ResourceUUID uuid,
+            const std::string& format,
+            const std::vector<uint8_t>& data,
+            const std::string& sourcePath           // used for multi resource types
+        );
+    };
+}

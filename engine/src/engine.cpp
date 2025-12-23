@@ -1,0 +1,128 @@
+//
+// Created by okker on 20/12/2025.
+//
+
+// ReSharper disable CppMemberFunctionMayBeConst
+#include "skal/engine.h"
+
+#include "skal/file_io.h"
+#include "skal/device/device.h"
+#include "skal/input/input.h"
+#include "skal/util/log.h"
+#include "skal/file_io.h"
+#include "skal/ecs/scene.h"
+#include "skal/ecs/scene_manager.h"
+#include "skal/renderering/renderer.h"
+#include "skal/resource/resource_indexer.h"
+#include "skal/resource/resource_manager.h"
+
+
+namespace skal
+{
+    EngineClass Engine;
+}
+
+
+void skal::EngineClass::Initialize()
+{
+    skal::Log::Initialize();
+    PrintBanner();
+
+    m_fileIO = new skal::FileIO();
+
+    m_device = new skal::Device(1280, 720); //TODO (okke): hard coded sizes instead of project based.
+    m_input = new skal::Input();
+    m_indexer = new skal::ResourceIndexer();
+    m_resources = new skal::ResourceManager();
+    m_sceneManager = new skal::SceneManager();
+    m_renderer = new skal::Renderer();
+}
+
+void skal::EngineClass::LoadProject(const skal::Project &project)
+{
+    m_project = project;
+    m_projectLoaded = true;
+    m_device->SetTitle(project.name);
+
+    if (m_project.engine_version != SKAL_ENGINE_VERSION)
+    {
+        skal::Log::Warn("Project was created with engine v{}, running v{}", m_project.engine_version,
+                        SKAL_ENGINE_VERSION);
+    }
+
+    // Load entry scene
+
+    m_sceneManager->LoadScene(project.entry_scene);
+}
+
+void skal::EngineClass::Shutdown()
+{
+    delete m_renderer;
+    delete m_sceneManager;
+    delete m_resources;
+    delete m_indexer;
+    delete m_input;
+    delete m_device;
+
+    delete m_fileIO;
+}
+
+void skal::EngineClass::PreUpdate()
+{
+    m_device->Update();
+    m_input->Update();
+
+    if (!m_projectLoaded || !m_sceneManager->GetActiveScene())
+    {
+        Log::Critical("No project loaded!");
+    }
+}
+
+void skal::EngineClass::Update()
+{
+
+}
+
+void skal::EngineClass::PostUpdate()
+{
+    m_sceneManager->GetActiveScene()->Update();
+}
+
+
+void skal::EngineClass::RenderScene()
+{
+    m_device->BeginFrame();
+    m_renderer->Render();
+    //TODO (okke):
+}
+
+void skal::EngineClass::RenderDebugUI()
+{
+    //TODO (okke):
+}
+
+void skal::EngineClass::PresentFrame()
+{
+    m_device->EndFrame();
+}
+
+void skal::EngineClass::RequestClose()
+{
+    m_device->RequestClose();
+}
+
+bool skal::EngineClass::ShouldRun() const
+{
+    return !m_device->ShouldClose();
+}
+
+const skal::Project &skal::EngineClass::GetProject() const
+{
+    assert(m_projectLoaded && "LoadProject must be called before accessing project");
+    return m_project;
+}
+
+void skal::EngineClass::PrintBanner()
+{
+    Log::Info("Skal ");
+}

@@ -2,18 +2,88 @@
 // Created by okker on 20/12/2025.
 //
 
-#include <skal/application.h>
+#include <iostream>
+#include <skal/engine.h>
 
+#include "editor_context.h"
+#include "skal/uuid_types.h"
 #include "skal/input/input.h"
+#include "skal/resource/resource_manager.h"
+#include "skal/resource/types/texture_resource.h"
 #include "skal/util/log.h"
+#include "utils/file_dialogue.h"
+#include "utils/project_dialog.h"
 
-int main() {
+int main(const int argc, char **argv)
+{
+#ifdef SKAL_EDITOR
+    std::cout << "SKAL_EDITOR is defined\n";
+#else
+    std::cout << "SKAL_EDITOR is NOT defined\n";
+#endif
 
-    skal::Engine.Initialize("./project");
+    skal::Engine.Initialize();
 
-    while (skal::Engine.ShouldRun()) {
+    editor::EditorContext editor;
+    std::string projectPath;
 
-        skal::Engine.UpdateSystems();  // Input, physics, game logic
+    if (argc > 1)
+    {
+        // Command line: editor.exe "C:/Projects/MyGame"
+        projectPath = argv[1];
+    } else
+    {
+        /// Show dialog with options
+        const auto choice = editor::ShowProjectStartDialog();
+
+        if (choice == editor::ProjectAction::Open)
+        {
+            projectPath = editor::FileDialogue::OpenFolder();
+            if (projectPath.empty())
+            {
+                // user cancelled
+                skal::Engine.Shutdown();
+                return 0;
+            }
+        } else if (choice == editor::ProjectAction::CreateNew)
+        {
+            const std::string projectName = editor::PromptProjectName();
+            const std::string folderPath = editor::FileDialogue::OpenFolder();
+
+            if (editor.CreateProject(folderPath, projectName))
+            {
+                projectPath = folderPath + "/" + projectName;
+            }
+        } else
+        {
+            // user cancelled
+            skal::Engine.Shutdown();
+            return 0;
+        }
+    }
+
+
+    if (!editor.OpenProject(projectPath))
+    {
+        skal::Log::Error("Opening project failed");
+        skal::Engine.Shutdown();
+        return 1;
+    }
+
+    // TODO (okke): test resource... remove this
+    skal::Engine.ResourceManager().Load<skal::Texture>(skal::ResourceUUID::from_string("656ca6d2-1b2d-4588-8a59-ec0c3c812744"));
+
+    // == game loop ==
+
+    while (skal::Engine.ShouldRun())
+    {
+        skal::Engine.PreUpdate();
+
+        if (editor.GetPlayState() == editor::EditorContext::PlayState::Playing)
+        {
+            skal::Engine.Update();
+        }
+
 
         if (skal::Engine.Input().GetKeyDown(skal::input::KeyboardKey::Escape))
         {
@@ -21,12 +91,15 @@ int main() {
             skal::Engine.RequestClose();
         }
 
+
+
+        skal::Engine.PostUpdate();
+
         skal::Engine.RenderScene();
         //editorCtx.RenderGizmos();
         //editorCtx.RenderUI();
         skal::Engine.RenderDebugUI();
         skal::Engine.PresentFrame();
-
     }
 
     skal::Engine.Shutdown();

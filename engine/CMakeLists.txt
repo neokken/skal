@@ -11,18 +11,56 @@ set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(SPDLOG_INSTALL OFF CACHE BOOL "" FORCE)
 add_subdirectory(extern/spdlog)
 
+add_subdirectory(extern/fmt)
+
+add_subdirectory(extern/nlohmann)
+
+
+set(MAGIC_ENUM_OPT_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(MAGIC_ENUM_OPT_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(MAGIC_ENUM_OPT_INSTALL OFF CACHE BOOL "" FORCE)
+add_subdirectory(extern/magic_enum)
+
+
+add_subdirectory(extern/entt)
+
+
+add_library(glad STATIC extern/glad/src/glad.c)
+target_include_directories(glad PUBLIC extern/glad/include)
+
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE HEADERS "include/*.h")
 
 add_library(SkalEngine STATIC ${SOURCES} ${HEADERS})
 
+
+
+# Engine defines HARD CODED FOPR NOW.. TODO (okke): whats the plan with this?
+target_compile_definitions(SkalEngine PUBLIC
+        SKAL_PLATFORM_WINDOWS
+        SKAL_OPENGL
+        SKAL_SDL3
+
+        GLM_ENABLE_EXPERIMENTAL
+
+        SKAL_EDITOR                 # TODO (okke): this should not be here
+)
+
+
 target_include_directories(SkalEngine PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/extern/stb
 )
 
 target_link_libraries(SkalEngine PUBLIC
         glm::glm
         SDL3::SDL3-static
         spdlog::spdlog
+        fmt::fmt
+        nlohmann_json::nlohmann_json
+        magic_enum::magic_enum
+        EnTT::EnTT
+        glad
 )
+
