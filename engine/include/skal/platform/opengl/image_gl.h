@@ -9,17 +9,17 @@
 
 namespace skal
 {
-    class Image
+    class GL_Image
     {
     public:
-        Image() = default;
-        ~Image();
+        GL_Image() = default;
+        ~GL_Image();
 
-        Image(const Image&) = delete;
-        Image& operator=(const Image&) = delete;
+        GL_Image(const GL_Image&) = delete;
+        GL_Image& operator=(const GL_Image&) = delete;
 
-        Image(Image&&) noexcept;
-        Image& operator=(Image&&) noexcept;
+        GL_Image(GL_Image&&) noexcept;
+        GL_Image& operator=(GL_Image&&) noexcept;
 
         void CreateGLTextureWithData(unsigned char* data, int width, int height, int channels,
                                       const TextureDescriptor& desc);

@@ -15,7 +15,7 @@ namespace skal
         const auto it = m_resources.find(uuid);
         if (it == m_resources.end())
         {
-            skal::Log::Warn("Tried to unload {}, while it doesnt exist", uuid.to_string());
+            skal::Log::Error("ResourceManager::Unload - Tried to unload {}, while it was not loaded", uuid.to_string());
             return;
         }
 
@@ -43,7 +43,7 @@ namespace skal
 
             if (!toRemove.empty())
             {
-                skal::Log::Info("GC pass: removing {} resources", toRemove.size());
+                skal::Log::Info("GarbageCollected {} resources, unloading", toRemove.size());
                 changed = true;
                 removedAny = true;
 
@@ -60,7 +60,7 @@ namespace skal
         }
     }
 
-    IResource *ResourceManager::LoadFromDisk(const MetaResource &meta)
+    IResource* ResourceManager::LoadFromDisk(const MetaResource &meta)
     {
         // Load data based on source type
 
@@ -88,7 +88,7 @@ namespace skal
                 return m_resources[meta.uuid].resource.get();
             }
 
-            Log::Error("Parent loaded but embedded resource not found: {}", meta.uuid.to_string());
+            Log::Error("ResourceManager::LoadFromDisk - Parent loaded but embedded resource not found: {}", meta.uuid.to_string());
             return nullptr;
         }
         else if (std::holds_alternative<PakLocation>(meta.source))
@@ -100,7 +100,7 @@ namespace skal
         return nullptr;
     }
 
-    IResource *ResourceManager::GetRaw(const ResourceUUID uuid)
+    IResource* ResourceManager::GetRaw(const ResourceUUID uuid)
     {
         const auto it = m_resources.find(uuid);
         if (it == m_resources.end())
@@ -118,7 +118,7 @@ namespace skal
         const auto it = m_resources.find(uuid);
         if (it == m_resources.end())
         {
-            Log::Warn("IncrementRef on non-existent resource: {}", uuid.to_string());
+            Log::Error("ResourceManager::IncrementRef - resource doesn't exist: {}", uuid.to_string());
             return;
         }
 
@@ -132,7 +132,7 @@ namespace skal
         const auto it = m_resources.find(uuid);
         if (it == m_resources.end())
         {
-            Log::Warn("DecrementRef on non-existent resource: {}", uuid.to_string());
+            Log::Error("ResourceManager::DecrementRef - resource doesn't exist: {}", uuid.to_string());
             return;
         }
 
@@ -140,7 +140,7 @@ namespace skal
 
         if (it->second.refCount < 0)
         {
-            Log::Error("Negative refcount for resource: {}", uuid.to_string());
+            Log::Error("ResourceManager::DecrementRef - Negative refcount for resource: {}", uuid.to_string());
             it->second.refCount = 0;
         }
     }

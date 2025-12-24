@@ -18,16 +18,12 @@ namespace skal
         void IndexPackage(const std::string &pakPath);
         void IndexMetaFile(const std::string &path);
 
-        const MetaResource *Get(ResourceUUID uuid) const;
+        const MetaResource* Get(ResourceUUID uuid) const;
 
         bool Exists(ResourceUUID uuid) const;
 
+
 #ifdef SKAL_EDITOR
-        void RemoveDependent(ResourceUUID resource, ResourceUUID dependent);
-
-        void AddDependent(ResourceUUID resource, ResourceUUID dependent);
-
-
         static nlohmann::ordered_json SerializeMetaFile(const MetaResource& meta);
 #endif
 
@@ -35,6 +31,5 @@ namespace skal
         std::unordered_map<ResourceUUID, MetaResource> m_resources;
 
         std::vector<MetaResource> ParseMetaFile(const std::string &path);
-
     };
 } // skal

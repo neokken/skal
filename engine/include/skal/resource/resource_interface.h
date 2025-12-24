@@ -11,7 +11,6 @@
 namespace skal
 {
 
-
     class IResource
     {
     public:
@@ -25,8 +24,6 @@ namespace skal
     protected:
         explicit IResource(const ResourceUUID uuid, std::string format) : m_uuid(uuid), m_format(std::move(format)) {}
 
-        // Implementation how to the resource is saved to disk
-        virtual bool SaveToFile(const std::string& path) { skal::Log::Warn("SaveToFile has not been implemented for this resource."); return false; }
 
     private:
         ResourceUUID m_uuid;
@@ -35,13 +32,14 @@ namespace skal
         // ========== Editor-only functionality ==========
 
 #ifdef SKAL_EDITOR
+        virtual bool SaveToFile(const std::string& path) { skal::Log::Warn("SaveToFile has not been implemented for this resource."); return false; }
+
     public:
         void MarkDirty() { m_dirty = true; }
         bool Save();    // will save to the location its stored.
         [[nodiscard]] bool IsDirty() const { return m_dirty; }
 
     private:
-
         bool m_dirty{false};
 #endif
     };

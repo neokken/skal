@@ -13,7 +13,8 @@ namespace skal
     class SceneResource final : public IResource
     {
     public:
-        SceneResource(const ResourceUUID &uuid, const std::string &format);
+        SceneResource(const ResourceUUID &uuid, const std::string &format) : IResource(uuid, format) {}
+
 
         void Load(const std::vector<uint8_t>& data);
 
@@ -22,9 +23,8 @@ namespace skal
 
 #ifdef SKAL_EDITOR
         void UpdateData(const nlohmann::json& data);
+        //bool SaveToFile(const std::string& path) override;
 #endif
-    protected:
-        bool SaveToFile(const std::string& path) override;
 
     private:
         nlohmann::json m_sceneData;

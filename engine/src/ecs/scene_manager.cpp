@@ -14,7 +14,7 @@ void skal::SceneManager::LoadScene(const ResourceUUID sceneUUID)
 {
     const auto scene = Engine.ResourceManager().Load<SceneResource>(sceneUUID);
     if (!scene.IsValid()) {
-        Log::Error("Could not load scene resource");
+        Log::Error("SceneManager::LoadScene - Could not load scene resource");
         return;
     }
 

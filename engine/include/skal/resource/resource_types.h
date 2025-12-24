@@ -15,6 +15,7 @@ namespace skal
     {
         Scene,
         Texture,
+        Mesh,
         Unknown,
         // Add new types here
     };
@@ -40,9 +41,6 @@ namespace skal
         std::string format;
 
         std::vector<EmbeddedMetaResource> embeddedResources;
-
-        std::vector<ResourceUUID> dependents; // Reverse dependencies who are using this
-        std::vector<std::string> external_dependencies_extensions; // list of co-located file extensions with same basename
     };
 
     struct PakLocation
@@ -65,10 +63,7 @@ namespace skal
             PakLocation // Pak file (player)
         > source;
 
-
         std::vector<EmbeddedMetaResource> embeddedResources;
-        std::vector<ResourceUUID> dependents; // Reverse dependencies who are using this
-        std::vector<std::string> external_dependencies_extensions; // list of co-located file extensions with same basename
     };
 
 

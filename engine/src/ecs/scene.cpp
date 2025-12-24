@@ -107,13 +107,6 @@ namespace skal
                     continue;
                 }
 
-                if (!HasComponent<Transform>(parent_entity))
-                {
-                    Log::Warn("Parent entity missing TransformComponent, skipping hierarchy update");
-                    transform.m_cachedWorldTransform = transform.GetLocalTransform();
-                    continue;
-                }
-
                 const auto& parent_transform = GetComponent<Transform>(parent_entity);
                 transform.m_cachedWorldTransform = parent_transform.m_cachedWorldTransform * transform.GetLocalTransform();
             }
@@ -148,14 +141,14 @@ namespace skal
         const Entity childEntity = GetEntity(child);
         if (childEntity == entt::null)
         {
-            Log::Warn("Invalid child UUID");
+            Log::Error("Scene::SetParent - Invalid child UUID");
             return;
         }
 
         // Cannot reparent root
         if (HasComponent<RootTag>(childEntity))
         {
-            Log::Error("Cannot reparent root entity");
+            Log::Error("Scene::SetParent - Cannot reparent root entity");
             return;
         }
 
@@ -163,7 +156,7 @@ namespace skal
         EntityUUID actualParent = parent;
         if (actualParent == EntityUUID::null())
         {
-            Log::Warn("Null parent not allowed, using scene root");
+            Log::Warn("Scene::SetParent - Null parent not allowed, using scene root");
             //TODO (okke): can be probably be removed since its quite nice to just set the parent as nothing?
             actualParent = GetRootUUID();
         }
@@ -171,7 +164,7 @@ namespace skal
         const Entity parentEntity = GetEntity(actualParent);
         if (parentEntity == entt::null)
         {
-            Log::Error("Invalid parent UUID");
+            Log::Error("Scene::SetParent - Invalid parent UUID");
             return;
         }
 
@@ -183,13 +176,13 @@ namespace skal
         {
             if (++safetyCounter > maxDepth)
             {
-                Log::Error("Hierarchy traversal exceeded maximum depth, possible existing cycle");
+                Log::Error("Scene::SetParent - Hierarchy traversal exceeded maximum depth, possible existing cycle");
                 return;
             }
 
             if (checkUUID == child)
             {
-                Log::Error("Cannot parent entity to its own descendant, would create cycle");
+                Log::Error("Scene::SetParent - Cannot parent entity to its own descendant, would create cycle");
                 return;
             }
 
@@ -288,7 +281,7 @@ namespace skal
     {
         if (HasComponent<RootTag>(entity))
         {
-            skal::Log::Critical("Attempted to destroy root entity");
+            skal::Log::Error("Attempted to destroy root entity");
             return;
         }
 

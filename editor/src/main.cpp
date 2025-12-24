@@ -16,12 +16,6 @@
 
 int main(const int argc, char **argv)
 {
-#ifdef SKAL_EDITOR
-    std::cout << "SKAL_EDITOR is defined\n";
-#else
-    std::cout << "SKAL_EDITOR is NOT defined\n";
-#endif
-
     skal::Engine.Initialize();
 
     editor::EditorContext editor;
@@ -29,7 +23,7 @@ int main(const int argc, char **argv)
 
     if (argc > 1)
     {
-        // Command line: editor.exe "C:/Projects/MyGame"
+        // Command line: editor.exe "C:/Projects/MyGame"    // full path, or it's appended to the working directory
         projectPath = argv[1];
     } else
     {
@@ -50,7 +44,7 @@ int main(const int argc, char **argv)
             const std::string projectName = editor::PromptProjectName();
             const std::string folderPath = editor::FileDialogue::OpenFolder();
 
-            if (editor.CreateProject(folderPath, projectName))
+            if (editor::EditorContext::CreateProject(folderPath, projectName))
             {
                 projectPath = folderPath + "/" + projectName;
             }
@@ -65,7 +59,7 @@ int main(const int argc, char **argv)
 
     if (!editor.OpenProject(projectPath))
     {
-        skal::Log::Error("Opening project failed");
+        skal::Log::Error("Editor::main - Opening project failed");
         skal::Engine.Shutdown();
         return 1;
     }

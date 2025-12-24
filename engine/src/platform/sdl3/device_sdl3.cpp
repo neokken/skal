@@ -22,14 +22,14 @@ skal::Device::Device(const int width, const int height) :   // TODO (okke): Shou
 
     if (!m_window)
     {
-        skal::Log::Critical("Failed to create SDL window: {}", SDL_GetError());
+        skal::Log::Critical("Device::Device - Failed to create SDL window: {}", SDL_GetError());
         return;
     }
 
     m_glContext = SDL_GL_CreateContext(m_window);
     if (!m_glContext)
     {
-        skal::Log::Critical("Failed to create OpenGL context: {}", SDL_GetError());
+        skal::Log::Critical("Device::Device - Failed to create OpenGL context: {}", SDL_GetError());
         return;
     }
 

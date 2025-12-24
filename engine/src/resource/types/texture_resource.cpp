@@ -11,7 +11,7 @@
 
 skal::Texture::~Texture()
 {
-    skal::Engine.Renderer().UnloadTexture(m_textureData);
+    skal::Engine.Renderer().UnloadTexture(m_textureHandle);
 }
 
 void skal::Texture::Load(const std::vector<uint8_t> &data, const std::string &sourcePath)
@@ -21,7 +21,7 @@ void skal::Texture::Load(const std::vector<uint8_t> &data, const std::string &so
     {
         const auto file = TextureFile::FromJSON(nlohmann::json::parse(data));
 
-        TextureDescriptor desc;
+        TextureDescriptor desc{};
         desc.generate_mipmaps = file.gen_mipmaps;
         desc.color_space = file.color_space;
 
@@ -30,15 +30,15 @@ void skal::Texture::Load(const std::vector<uint8_t> &data, const std::string &so
 
         if (!Engine.FileIO().Exists(imagePath))
         {
-            skal::Log::Critical("Texture png, could not find image at {}",imagePath );
+            skal::Log::Error("Texture::Load - texture png, could not find file at {}",imagePath );
             return;
         }
 
         const std::vector<uint8_t> image = Engine.FileIO().ReadBinaryFile(imagePath);
-        m_textureData = skal::Engine.Renderer().LoadTexture(GetFormat(), image, desc);
+        m_textureHandle = skal::Engine.Renderer().LoadTexture(GetFormat(), image, desc);
     }
     else
     {
-        skal::Log::Critical("Unsupported texture format: {}",format );
+        skal::Log::Error("Texture::Load - Unsupported texture format: {}",format );
     }
 }

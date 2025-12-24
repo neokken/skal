@@ -30,7 +30,7 @@ namespace skal
             InitShader();
         }
 
-        ResourcePool<Image> textures;
+        ResourcePool<GL_Image> textures;
         //ResourcePool<GL_Mesh> meshes;
         //ResourcePool<GL_Shader> shaders;
 
@@ -164,11 +164,11 @@ namespace skal
     Renderer::Renderer()
     {
         // GLAD is GL-specific, so GL renderer handles it
-#ifdef SKAL_OPENGL
+#ifdef SKAL_SDL3
         if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(SDL_GL_GetProcAddress)))
         {
-            skal::Log::Critical("Failed to initialize GLAD");
-            skal::Log::Critical("SDL Error: {}", SDL_GetError());
+            skal::Log::Critical("Renderer::Renderer - Failed to initialize GLAD");
+            skal::Log::Critical("Renderer::Renderer - SDL Error: {}", SDL_GetError());
             return;
         }
         skal::Log::Info("OpenGL Version: {}", reinterpret_cast<const char *>(glGetString(GL_VERSION)));
@@ -179,12 +179,12 @@ namespace skal
 
     Renderer::~Renderer() = default;
 
-    MeshHandle Renderer::LoadMesh(const std::string &format, const std::vector<uint8_t> &data)
+    RenderMeshHandle Renderer::LoadMesh(const std::string &format, const std::vector<uint8_t> &data)
     {
         return {};
     }
 
-    TextureHandle Renderer::LoadTexture(const std::string &format, const std::vector<uint8_t> &data,
+    RenderTextureHandle Renderer::LoadTexture(const std::string &format, const std::vector<uint8_t> &data,
                                         const TextureDescriptor &desc)
     {
         if (format == "png")
@@ -199,44 +199,52 @@ namespace skal
                 4               // TODO (okke) : force it to 4 channels
             );
 
+
             if (!pixels)
             {
-                skal::Log::Critical("Failed to load PNG texture: {}", stbi_failure_reason());
-                return TextureHandle::null;
+                skal::Log::Error("Renderer::LoadTexture - Failed to load PNG texture: {}", stbi_failure_reason());
+                return RenderTextureHandle::null;
             }
 
-            Image image;
+            if (channels != 4)
+            {
+                Log::Warn("Renderer::LoadTexture - Image has {} channels, converting to RGBA", channels);
+            }
+
+
+
+            GL_Image image;
             image.CreateGLTextureWithData(pixels, width, height, 4, desc);  // we force to 4 channels because of stbi_load_from_memory
 
             stbi_image_free(pixels); // Free stb_image allocation
 
             uint32_t id = m_impl->textures.Allocate(std::move(image));
-            return static_cast<TextureHandle>(id);
+            return static_cast<RenderTextureHandle>(id);
         } else
         {
-            skal::Log::Critical("render_gl doesnt support texture format: {}", format);
+            skal::Log::Error("Renderer::LoadTexture - doesnt support texture format: {}", format);
             return {};
         }
     }
 
-    ShaderHandle Renderer::LoadShader(const std::string &format, const std::vector<uint8_t> &data)
+    RenderShaderHandle Renderer::LoadShader(const std::string &format, const std::vector<uint8_t> &data)
     {
         return {};
     }
 
 
-    void Renderer::UnloadMesh(MeshHandle handle)
+    void Renderer::UnloadMesh(RenderMeshHandle handle)
     {
         //m_impl->meshes.Free(static_cast<uint32_t>(handle));
     }
 
 
-    void Renderer::UnloadTexture(TextureHandle handle)
+    void Renderer::UnloadTexture(RenderTextureHandle handle)
     {
         m_impl->textures.Free(static_cast<uint32_t>(handle));
     }
 
-    void Renderer::UnloadShader(ShaderHandle handle)
+    void Renderer::UnloadShader(RenderShaderHandle handle)
     {
     }
 
@@ -246,7 +254,7 @@ namespace skal
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Get first texture for testing
-        const Image* image = m_impl->textures.Get(1);
+        const GL_Image* image = m_impl->textures.Get(1);
         if (!image || image->GetHeight() == -1) return;
 
         glUseProgram(m_impl->quadShader);

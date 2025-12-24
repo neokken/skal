@@ -16,7 +16,7 @@ std::string skal::FileIO::ReadTextFile(const std::string &path)
     std::ifstream file(path);
     if (!file.is_open())
     {
-        skal::Log::Error("File {} was not found!", path);
+        skal::Log::Error("FileIO::ReadTextFile - File {} was not found!", path);
         return {};
     }
 
@@ -33,7 +33,7 @@ bool skal::FileIO::WriteTextFile(const std::string &path, const std::string &con
     std::ofstream file(path);
     if (!file.is_open())
     {
-        skal::Log::Error("Failed to open file for writing: {}", path);
+        skal::Log::Error("FileIO::WriteTextFile - Failed to open file for writing: {}", path);
         return false;
     }
     file << content;
@@ -46,7 +46,7 @@ std::vector<uint8_t> skal::FileIO::ReadBinaryFile(const std::string &path)
     std::ifstream file(path, std::ios::binary | std::ios::ate);
     if (!file.is_open())
     {
-        skal::Log::Error("File {} was not found!", path);
+        skal::Log::Error("FileIO::ReadBinaryFile - File {} was not found!", path);
         return {};
     }
     const std::streamsize size = file.tellg();
@@ -63,14 +63,14 @@ bool skal::FileIO::WriteBinaryFile(const std::string &path, const std::vector<ui
 {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        skal::Log::Error("Failed to open file for writing: {}", path);
+        skal::Log::Error("FileIO::WriteBinaryFile - Failed to open file for writing: {}", path);
         return false;
     }
 
     file.write(reinterpret_cast<const char*>(data.data()), static_cast<std::streamsize>(data.size()));
 
     if (!file.good()) {
-        skal::Log::Error("Failed to write to file: {}", path);
+        skal::Log::Error("FileIO::WriteBinaryFile - Failed to write to file: {}", path);
         return false;
     }
 

@@ -33,6 +33,7 @@ namespace skal
         template<typename... Args>
         static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) {
             s_logger->critical(fmt, std::forward<Args>(args)...);
+            assert(false && "Critical error occurred");
             std::abort();
         }
 

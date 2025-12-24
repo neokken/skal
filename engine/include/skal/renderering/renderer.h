@@ -10,15 +10,15 @@
 
 namespace skal
 {
-    enum class MeshHandle : uint32_t
+    enum class RenderMeshHandle : uint32_t
     {
         null = 0
     };
-    enum class TextureHandle : uint32_t
+    enum class RenderTextureHandle : uint32_t
     {
         null = 0
     };
-    enum class ShaderHandle : uint32_t
+    enum class RenderShaderHandle : uint32_t
     {
         null = 0
     };
@@ -35,14 +35,14 @@ namespace skal
         Renderer();
         ~Renderer();
 
-        MeshHandle LoadMesh(const std::string& format, const std::vector<uint8_t>& data);
-        void UnloadMesh(MeshHandle handle);
+        RenderMeshHandle LoadMesh(const std::string& format, const std::vector<uint8_t>& data);
+        void UnloadMesh(RenderMeshHandle handle);
 
-        TextureHandle LoadTexture(const std::string& format, const std::vector<uint8_t>& data, const TextureDescriptor& desc);
-        void UnloadTexture(TextureHandle handle);
+        RenderTextureHandle LoadTexture(const std::string& format, const std::vector<uint8_t>& data, const TextureDescriptor& desc);
+        void UnloadTexture(RenderTextureHandle handle);
 
-        ShaderHandle LoadShader(const std::string& format, const std::vector<uint8_t>& data);
-        void UnloadShader(ShaderHandle handle);
+        RenderShaderHandle LoadShader(const std::string& format, const std::vector<uint8_t>& data);
+        void UnloadShader(RenderShaderHandle handle);
 
 
         void Render();

@@ -46,7 +46,7 @@ void skal::EngineClass::LoadProject(const skal::Project &project)
 
     if (m_project.engine_version != SKAL_ENGINE_VERSION)
     {
-        skal::Log::Warn("Project was created with engine v{}, running v{}", m_project.engine_version,
+        skal::Log::Error("EngineClass::LoadProject - Project was created with engine v{}, running v{}", m_project.engine_version,
                         SKAL_ENGINE_VERSION);
     }
 
@@ -74,7 +74,8 @@ void skal::EngineClass::PreUpdate()
 
     if (!m_projectLoaded || !m_sceneManager->GetActiveScene())
     {
-        Log::Critical("No project loaded!");
+        Log::Critical("EngineClass::PreUpdate - No active scene, cannot continue");
+        std::abort();
     }
 }
 

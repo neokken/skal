@@ -35,7 +35,7 @@ namespace skal
             m_freeList.push_back(handle);
         }
 
-        T *Get(uint32_t handle)
+        T* Get(uint32_t handle)
         {
             if (handle == 0 || handle > m_resources.size()) return nullptr;
             return &m_resources[handle - 1];

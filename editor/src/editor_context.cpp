@@ -71,7 +71,7 @@ namespace editor
         m_projectPath = path + "/project.skal";
         if (!skal::Engine.FileIO().Exists(m_projectPath))
         {
-            skal::Log::Error("No project.skal found at {}", path);
+            skal::Log::Error("EditorContext::OpenProject No project.skal found at {}", path);
             return false;
         }
 

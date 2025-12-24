@@ -9,12 +9,12 @@
 
 #include "skal/util/log.h"
 
-skal::Image::~Image()
+skal::GL_Image::~GL_Image()
 {
     if (m_texture) glDeleteTextures(1, &m_texture);
 }
 
-skal::Image::Image(Image&& other) noexcept
+skal::GL_Image::GL_Image(GL_Image&& other) noexcept
     : m_texture(other.m_texture)
     , m_width(other.m_width)
     , m_height(other.m_height)
@@ -26,7 +26,7 @@ skal::Image::Image(Image&& other) noexcept
         other.m_channels = -1;
     }
 
-skal::Image& skal::Image::operator=(Image&& other) noexcept
+skal::GL_Image& skal::GL_Image::operator=(GL_Image&& other) noexcept
 {
     if (this != &other)
     {
@@ -45,9 +45,15 @@ skal::Image& skal::Image::operator=(Image&& other) noexcept
     return *this;
 }
 
-void skal::Image::CreateGLTextureWithData(unsigned char *data, int width, int height, int channels,
+void skal::GL_Image::CreateGLTextureWithData(unsigned char *data, int width, int height, int channels,
                                           const TextureDescriptor &desc)
 {
+    if (m_texture)
+    {
+        glDeleteTextures(1, &m_texture);
+        m_texture = 0;
+    }
+
     m_width = width;
     m_height = height;
     m_channels = channels;
@@ -68,11 +74,10 @@ void skal::Image::CreateGLTextureWithData(unsigned char *data, int width, int he
             usage = GL_RGBA;
             break;
         default:
-            skal::Log::Critical("Creating an image with unsupported channel count: {}", channels);
+            Log::Error("Image::CreateGLTextureWithData - Unsupported channel count: {}", channels);
             return;
     }
 
-    if (m_texture) glDeleteTextures(1, &m_texture);
 
     glGenTextures(1, &m_texture);
     glBindTexture(GL_TEXTURE_2D, m_texture);
@@ -91,7 +96,9 @@ void skal::Image::CreateGLTextureWithData(unsigned char *data, int width, int he
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
     {
-        skal::Log::Critical("glTexImage2D failed with error: {}", error);
+        Log::Error("Image::CreateGLTextureWithData - glTexImage2D failed: {}", error);
+        m_texture = 0;
+        return;
     }
 
     if (desc.generate_mipmaps)

@@ -49,7 +49,7 @@ public:
 
     [[nodiscard]] ResourceType GetType() const override { return ResourceType::Texture; }
 
-    [[nodiscard]] TextureHandle GetData() const { return m_textureData; }
+    [[nodiscard]] RenderTextureHandle GetData() const { return m_textureHandle; }
 
 
     void Load(const std::vector<uint8_t>& data, const std::string& sourcePath);
@@ -60,7 +60,7 @@ protected:
 
 
 private:
-    TextureHandle m_textureData{TextureHandle::null};
+    RenderTextureHandle m_textureHandle{RenderTextureHandle::null};
 };
 
 }
