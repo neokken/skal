@@ -7,19 +7,19 @@
 
 #include "skal/renderering/renderer.h"
 
-namespace skal
+namespace skal::opengl
 {
-    class GL_Image
+    class Image
     {
     public:
-        GL_Image() = default;
-        ~GL_Image();
+        Image() = default;
+        ~Image();
 
-        GL_Image(const GL_Image&) = delete;
-        GL_Image& operator=(const GL_Image&) = delete;
+        Image(const Image&) = delete;
+        Image& operator=(const Image&) = delete;
 
-        GL_Image(GL_Image&&) noexcept;
-        GL_Image& operator=(GL_Image&&) noexcept;
+        Image(Image&&) noexcept;
+        Image& operator=(Image&&) noexcept;
 
         void CreateGLTextureWithData(unsigned char* data, int width, int height, int channels,
                                       const TextureDescriptor& desc);

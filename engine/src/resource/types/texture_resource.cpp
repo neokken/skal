@@ -8,6 +8,7 @@
 #include "skal/engine.h"
 #include "skal/file_io/file_io.h"
 
+#include "skal/util/json_helper.h"
 
 skal::Texture::~Texture()
 {
@@ -19,7 +20,14 @@ void skal::Texture::Load(const std::vector<uint8_t> &data, const std::string &so
     const auto format = GetFormat();
     if (format == "png")
     {
-        const auto file = TextureFile::FromJSON(nlohmann::json::parse(data));
+        const auto json_opt = skal::TryParseJson(data);
+        if (!json_opt)
+        {
+            skal::Log::Error("Texture::Load - Failed to parse JSON");
+            return;
+        }
+
+        const auto file = TextureFile::FromJSON(*json_opt);
 
         TextureDescriptor desc{};
         desc.generate_mipmaps = file.gen_mipmaps;

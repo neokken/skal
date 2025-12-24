@@ -4,6 +4,7 @@
 
 #pragma once
 #include "glm/vec3.hpp"
+#include "nlohmann/json_fwd.hpp"
 #include "skal/math/math_types.h"
 #include "skal/renderering/renderer.h"
 #include "skal/resource/resource_interface.h"
@@ -16,12 +17,16 @@ namespace skal
         std::vector<float> positions;        // xyz
         std::vector<float> normals;          // xyz
         std::vector<float> tangents;         // xyzw
-        std::vector<float> uvs;              // uv
+        std::vector<float> tex_coord_0;       // uv
+        std::vector<float> tex_coord_1;       // uv
         std::vector<float> colors;           // rgba
 
         std::vector<uint32_t> indices;
-    };
 
+        static nlohmann::json Serialize(const SkalMeshData& data);
+
+        static SkalMeshData Deserialize(const nlohmann::json& j);
+    };
 
 
     class Mesh : public IResource

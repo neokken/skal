@@ -40,7 +40,7 @@ namespace skal
         RenderMeshHandle LoadMesh(const std::string& format, const std::vector<uint8_t>& data);
         void UnloadMesh(RenderMeshHandle handle);
 
-        AABB GetMeshBounds(RenderMeshHandle);
+        AABB GetMeshBounds(RenderMeshHandle) const;
 
         RenderTextureHandle LoadTexture(const std::string& format, const std::vector<uint8_t>& data, const TextureDescriptor& desc);
         void UnloadTexture(RenderTextureHandle handle);

@@ -9,12 +9,12 @@
 
 #include "skal/util/log.h"
 
-skal::GL_Image::~GL_Image()
+skal::opengl::Image::~Image()
 {
     if (m_texture) glDeleteTextures(1, &m_texture);
 }
 
-skal::GL_Image::GL_Image(GL_Image&& other) noexcept
+skal::opengl::Image::Image(Image&& other) noexcept
     : m_texture(other.m_texture)
     , m_width(other.m_width)
     , m_height(other.m_height)
@@ -26,7 +26,7 @@ skal::GL_Image::GL_Image(GL_Image&& other) noexcept
         other.m_channels = -1;
     }
 
-skal::GL_Image& skal::GL_Image::operator=(GL_Image&& other) noexcept
+skal::opengl::Image& skal::opengl::Image::operator=(Image&& other) noexcept
 {
     if (this != &other)
     {
@@ -45,7 +45,7 @@ skal::GL_Image& skal::GL_Image::operator=(GL_Image&& other) noexcept
     return *this;
 }
 
-void skal::GL_Image::CreateGLTextureWithData(unsigned char *data, int width, int height, int channels,
+void skal::opengl::Image::CreateGLTextureWithData(unsigned char* data, int width, int height, int channels,
                                           const TextureDescriptor &desc)
 {
     if (m_texture)
