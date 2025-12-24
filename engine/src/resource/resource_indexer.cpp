@@ -6,7 +6,7 @@
 #include "skal/resource/resource_indexer.h"
 
 #include "skal/engine.h"
-#include "skal/file_io.h"
+#include "skal/file_io/file_io.h"
 
 #include <filesystem>
 

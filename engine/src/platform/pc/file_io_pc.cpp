@@ -3,7 +3,7 @@
 //
 
 // ReSharper disable CppMemberFunctionMayBeStatic
-#include "skal/file_io.h"
+#include "skal/file_io/file_io.h"
 
 
 std::string skal::FileIO::GetUserDataDirectory()

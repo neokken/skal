@@ -52,7 +52,6 @@ public:
     [[nodiscard]] RenderTextureHandle GetData() const { return m_textureHandle; }
 
 
-    void Load(const std::vector<uint8_t>& data, const std::string& sourcePath);
 
 
 protected:
@@ -60,6 +59,9 @@ protected:
 
 
 private:
+    friend class ResourceFactory;
+    void Load(const std::vector<uint8_t>& data, const std::string& sourcePath);
+
     RenderTextureHandle m_textureHandle{RenderTextureHandle::null};
 };
 

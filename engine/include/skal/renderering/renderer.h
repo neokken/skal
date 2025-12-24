@@ -7,6 +7,8 @@
 #include <memory>
 #include <vector>
 
+#include "skal/math/math_types.h"
+
 
 namespace skal
 {
@@ -37,6 +39,8 @@ namespace skal
 
         RenderMeshHandle LoadMesh(const std::string& format, const std::vector<uint8_t>& data);
         void UnloadMesh(RenderMeshHandle handle);
+
+        AABB GetMeshBounds(RenderMeshHandle);
 
         RenderTextureHandle LoadTexture(const std::string& format, const std::vector<uint8_t>& data, const TextureDescriptor& desc);
         void UnloadTexture(RenderTextureHandle handle);

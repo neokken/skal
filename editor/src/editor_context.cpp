@@ -7,7 +7,7 @@
 
 
 #include "skal/engine.h"
-#include "skal/file_io.h"
+#include "skal/file_io/file_io.h"
 #include "skal/project.h"
 #include "skal/uuid_types.h"
 #include "skal/ecs/scene.h"

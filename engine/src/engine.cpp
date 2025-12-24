@@ -5,11 +5,10 @@
 // ReSharper disable CppMemberFunctionMayBeConst
 #include "skal/engine.h"
 
-#include "skal/file_io.h"
+#include "skal/file_io/file_io.h"
 #include "skal/device/device.h"
 #include "skal/input/input.h"
 #include "skal/util/log.h"
-#include "skal/file_io.h"
 #include "skal/ecs/scene.h"
 #include "skal/ecs/scene_manager.h"
 #include "skal/renderering/renderer.h"

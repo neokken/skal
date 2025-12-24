@@ -281,7 +281,7 @@ namespace skal
     {
         if (HasComponent<RootTag>(entity))
         {
-            skal::Log::Error("Attempted to destroy root entity");
+            skal::Log::Error("Scene::DestroyEntityInternal - Attempted to destroy root entity");
             return;
         }
 

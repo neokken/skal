@@ -181,6 +181,7 @@ namespace skal
 
     RenderMeshHandle Renderer::LoadMesh(const std::string &format, const std::vector<uint8_t> &data)
     {
+        skal::Log::Error("Renderer::LoadMesh - Not Implemented");
         return {};
     }
 
@@ -229,13 +230,22 @@ namespace skal
 
     RenderShaderHandle Renderer::LoadShader(const std::string &format, const std::vector<uint8_t> &data)
     {
+        skal::Log::Error("Renderer::LoadShader - Not implemented");
+
         return {};
     }
 
 
     void Renderer::UnloadMesh(RenderMeshHandle handle)
     {
+        skal::Log::Error("Renderer::UnloadMesh - Not implemented");
         //m_impl->meshes.Free(static_cast<uint32_t>(handle));
+    }
+
+    AABB Renderer::GetMeshBounds(RenderMeshHandle)
+    {
+        skal::Log::Error("Renderer::GetMeshBounds - Not implemented");
+        return {};
     }
 
 
@@ -246,6 +256,8 @@ namespace skal
 
     void Renderer::UnloadShader(RenderShaderHandle handle)
     {
+        skal::Log::Error("Renderer::UnloadShader - Not implemented");
+
     }
 
     void Renderer::Render()

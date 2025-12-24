@@ -37,20 +37,20 @@ namespace skal
             auto* meta = skal::Engine.ResourceIndexer().Get(uuid);
             if (meta == nullptr)
             {
-                Log::Error("No indexed file with UUID: {}", uuid.to_string());
+                Log::Error("ResourceManager::Load - No indexed file with UUID: {}", uuid.to_string());
                 return Handle<T>();
             }
             IResource *resource = LoadFromDisk(*meta);
 
             if (!resource)
             {
-                Log::Error("Failed to load resource: {}", uuid.to_string());
+                Log::Error("ResourceManager::Load - Failed to load resource: {}", uuid.to_string());
                 return Handle<T>();
             }
 
             if (dynamic_cast<T*>(resource) == nullptr)
             {
-                Log::Error("Loaded resource type mismatch for UUID: {}", uuid.to_string());
+                Log::Error("ResourceManager::Load - Loaded resource type mismatch for UUID: {}", uuid.to_string());
                 delete resource;
                 return Handle<T>();
             }

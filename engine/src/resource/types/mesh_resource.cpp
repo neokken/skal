@@ -6,6 +6,7 @@
 
 #include "skal/engine.h"
 
+
 skal::Mesh::~Mesh()
 {
     skal::Engine.Renderer().UnloadMesh(m_meshHandle);
@@ -15,13 +16,21 @@ void skal::Mesh::Load(const std::vector<uint8_t>& data)
 {
     const auto& format = GetFormat();
 
-    if (format == "skel-mesh-json")
+    if (format == "skal-mesh-json")
     {
-        m_meshHandle = Engine.Renderer().LoadMesh(format, data);
+        m_meshHandle = Engine.Renderer().LoadMesh(GetFormat(), data);
+
+        if (m_meshHandle == RenderMeshHandle::null)
+        {
+            Log::Error("Mesh::Load - Failed to load mesh");
+            return;
+        }
+
+        m_bounds = Engine.Renderer().GetMeshBounds(m_meshHandle);
     }
     else
     {
-        Log::Error("Mesh::Load unsupported format: {}", GetFormat());
+        Log::Error("Mesh::Load - Unsupported format: {}", GetFormat());
         return;
     }
 }

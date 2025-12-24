@@ -6,7 +6,7 @@
 #include "skal/resource/types/texture_resource.h"
 
 #include "skal/engine.h"
-#include "skal/file_io.h"
+#include "skal/file_io/file_io.h"
 
 
 skal::Texture::~Texture()

@@ -4,7 +4,7 @@
 
 #include "skal/resource/resource_manager.h"
 
-#include "skal/file_io.h"
+#include "skal/file_io/file_io.h"
 #include "skal/resource/resource_interface.h"
 #include "skal/util/log.h"
 
