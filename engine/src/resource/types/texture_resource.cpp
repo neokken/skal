@@ -10,6 +10,7 @@
 
 #include "skal/util/json_helper.h"
 
+#if 0
 skal::Texture::~Texture()
 {
     skal::Engine.Renderer().UnloadTexture(m_textureHandle);
@@ -27,7 +28,7 @@ void skal::Texture::Load(const std::vector<uint8_t> &data, const std::string &so
             return;
         }
 
-        const auto file = TextureFile::FromJSON(*json_opt);
+        const auto file = TextureFile::Deserialize(*json_opt);
 
         TextureDescriptor desc{};
         desc.generate_mipmaps = file.gen_mipmaps;
@@ -50,3 +51,4 @@ void skal::Texture::Load(const std::vector<uint8_t> &data, const std::string &so
         skal::Log::Error("Texture::Load - Unsupported texture format: {}",format );
     }
 }
+#endif

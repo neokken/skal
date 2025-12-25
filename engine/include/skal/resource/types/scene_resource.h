@@ -13,20 +13,23 @@ namespace skal
     class SceneResource final : public IResource
     {
     public:
-        SceneResource(const ResourceUUID &uuid, const std::string &format) : IResource(uuid, format) {}
+        explicit SceneResource(const ResourceUUID &uuid) : IResource(uuid) {}
 
 
-        void Load(const std::vector<uint8_t>& data);
 
         [[nodiscard]] ResourceType GetType() const override { return ResourceType::Scene; }
         [[nodiscard]] const nlohmann::json& GetData() const { return m_sceneData; }
 
+        void Load(const ImportedAsset& asset) override;
+
 #ifdef SKAL_EDITOR
         void UpdateData(const nlohmann::json& data);
+
         //bool SaveToFile(const std::string& path) override;
 #endif
 
     private:
+        friend class ResourceFactory;
         nlohmann::json m_sceneData;
     };
 

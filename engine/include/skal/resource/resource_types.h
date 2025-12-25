@@ -9,6 +9,7 @@
 
 namespace skal
 {
+    struct ImportedAsset;
     class IResource;
 
     enum class ResourceType
@@ -71,11 +72,8 @@ namespace skal
     {
     public:
         static IResource* Create(
-            ResourceType type,
-            ResourceUUID uuid,
-            const std::string& format,
-            const std::vector<uint8_t>& data,
-            const std::string& sourcePath           // used for multi resource types
+            const ResourceUUID& uuid,
+            const ImportedAsset& asset
         );
     };
 }

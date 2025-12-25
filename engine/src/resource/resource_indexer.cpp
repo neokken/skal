@@ -79,10 +79,10 @@ namespace skal
             for (auto& e : j["embedded"])
             {
                 meta.embeddedResources.push_back({
-                    .uuid = ResourceUUID::from_string(e["uuid"]),
-                    .resourceType = ParseResourceType(e["type"]),
-                    .format = e["format"],
-                    .subPath = e["sub_path"]
+                    ResourceUUID::from_string(e["uuid"]),
+                    ParseResourceType(e["type"]),
+                    e["format"],
+                    e["sub_path"]
                 });
             }
         }
@@ -96,22 +96,22 @@ namespace skal
 
 
         results.push_back({
-            .uuid = meta.uuid,
-            .resourceType = meta.resourceType,
-            .format = meta.format,
-            .source = resourcePath.string(),
-            .embeddedResources = meta.embeddedResources,
+             meta.uuid,
+             meta.resourceType,
+             meta.format,
+             resourcePath.string(),
+             meta.embeddedResources,
         });
 
         // Create MetaResource for each embedded resource
         for (const auto& embedded : meta.embeddedResources)
         {
             results.push_back({
-                .uuid = embedded.uuid,
-                .resourceType = embedded.resourceType,
-                .format = embedded.format,
-                .source = meta.uuid, // Parent UUID
-                .embeddedResources = {},
+                 embedded.uuid,
+                 embedded.resourceType,
+                 embedded.format,
+                 meta.uuid, // Parent UUID
+                 {},
             });
         }
 

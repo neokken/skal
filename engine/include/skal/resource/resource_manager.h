@@ -40,7 +40,8 @@ namespace skal
                 Log::Error("ResourceManager::Load - No indexed file with UUID: {}", uuid.to_string());
                 return Handle<T>();
             }
-            IResource *resource = LoadFromDisk(*meta);
+
+            IResource *resource = LoadFromMeta(*meta);
 
             if (!resource)
             {
@@ -59,12 +60,13 @@ namespace skal
             return Handle<T>(uuid);
         }
 
-        template<typename T, typename... Args>
-        Handle<T> Create(Args &&... args)
+        template<typename T>
+        Handle<T> Create(const ImportedAsset& asset)
         {
             auto uuid = UUIDGenerator::generate<ResourceUUID>();
 
-            auto resource = std::make_unique<T>(uuid, std::forward<Args>(args)...);
+            auto resource = std::make_unique<T>(uuid);
+            resource->Load(asset);
             m_resources[uuid] = ResourceEntry{std::move(resource), 0};
 
             return Handle<T>(uuid);
@@ -87,7 +89,7 @@ namespace skal
 
         std::unordered_map<ResourceUUID, ResourceEntry> m_resources;
 
-        IResource* LoadFromDisk(const MetaResource &meta);
+        static IResource* LoadFromMeta(const MetaResource &meta);
 
         IResource* GetRaw(ResourceUUID uuid);
 

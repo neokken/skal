@@ -43,9 +43,9 @@ namespace skal::opengl
 
         void Upload(const MeshData& data);
 
-        uint32_t GetVAO() const { return m_VAO; }
-        uint32_t GetIndexCount() const { return m_IndexCount; }
-        AABB GetBounds() const { return m_bounds; }
+        [[nodiscard]] uint32_t GetVAO() const { return m_VAO; }
+        [[nodiscard]] uint32_t GetIndexCount() const { return m_IndexCount; }
+        [[nodiscard]] AABB GetBounds() const { return m_bounds; }
 
     private:
         static AABB CalculateBounds(const std::vector<Vertex>& vertices);

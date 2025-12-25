@@ -32,18 +32,18 @@ namespace skal
     class Mesh : public IResource
     {
     public:
-        Mesh(const ResourceUUID& uuid, const std::string& format) : IResource(uuid, format){}
+        explicit Mesh(const ResourceUUID& uuid) : IResource(uuid){}
         ~Mesh() override;
 
         [[nodiscard]] ResourceType GetType() const override {return ResourceType::Mesh; }
+        void Load(const ImportedAsset& asset) override;
 
+
+        [[nodiscard]] RenderMeshHandle GetRenderHandle() const {return m_meshHandle;}
 
     private:
         friend class ResourceFactory;
-        void Load(const std::vector<uint8_t>& data);
 
         RenderMeshHandle m_meshHandle{};
-
-        AABB m_bounds{};
     };
 }

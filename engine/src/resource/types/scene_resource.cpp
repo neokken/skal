@@ -5,25 +5,18 @@
 #include "skal/resource/types/scene_resource.h"
 
 #include "skal/engine.h"
-#include "skal/file_io/file_io.h"
+#include "skal/resource/asset_importer.h"
 
 
-
-void skal::SceneResource::Load(const std::vector<uint8_t> &data)
+void skal::SceneResource::Load(const ImportedAsset& asset)
 {
-    if (data.empty())
-    {
-        Log::Error("SceneResource::Load - SceneResource created with empty data");
-        m_sceneData = nlohmann::json::object();
-        return;
-    }
-
-    m_sceneData = nlohmann::json::parse(data);
+    m_sceneData = std::any_cast<nlohmann::json>(asset.payload);
 }
 
 
-
 #ifdef SKAL_EDITOR
+
+
 void skal::SceneResource::UpdateData(const nlohmann::json &data)
 {
     m_sceneData = data;

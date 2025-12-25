@@ -5,6 +5,7 @@
 #include "skal/resource/types/mesh_resource.h"
 
 #include "skal/engine.h"
+#include "skal/resource/asset_importer.h"
 
 
 nlohmann::json skal::SkalMeshData::Serialize(const SkalMeshData& data)
@@ -69,25 +70,15 @@ skal::Mesh::~Mesh()
     skal::Engine.Renderer().UnloadMesh(m_meshHandle);
 }
 
-void skal::Mesh::Load(const std::vector<uint8_t>& data)
+void skal::Mesh::Load(const ImportedAsset& asset)
 {
-    const auto& format = GetFormat();
-
-    if (format == "skal-mesh-json")
+    if (asset.ownership == AssetOwnership::Engine)
     {
-        m_meshHandle = Engine.Renderer().LoadMesh(GetFormat(), data);
-
-        if (m_meshHandle == RenderMeshHandle::null)
-        {
-            Log::Error("Mesh::Load - Failed to load mesh");
-            return;
-        }
-
-        m_bounds = Engine.Renderer().GetMeshBounds(m_meshHandle);
+        Engine.Renderer().UnloadMesh(m_meshHandle);
+        m_meshHandle = Engine.Renderer().LoadMesh(std::any_cast<SkalMeshData>(asset.payload));
     }
     else
     {
-        Log::Error("Mesh::Load - Unsupported format: {}", GetFormat());
-        return;
+        skal::Log::Error("Mesh::Load - ImportedAsset is not engine owned, something went wrong.");
     }
 }

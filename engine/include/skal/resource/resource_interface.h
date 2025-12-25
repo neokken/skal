@@ -10,6 +10,7 @@
 
 namespace skal
 {
+    struct ImportedAsset;
 
     class IResource
     {
@@ -18,16 +19,15 @@ namespace skal
 
         [[nodiscard]] virtual ResourceType GetType() const = 0;
         [[nodiscard]] const ResourceUUID& GetUUID() const { return m_uuid; }
-        [[nodiscard]] const std::string& GetFormat() const { return m_format; }
 
+        virtual void Load(const ImportedAsset& asset) = 0;
 
     protected:
-        explicit IResource(const ResourceUUID uuid, std::string format) : m_uuid(uuid), m_format(std::move(format)) {}
+        explicit IResource(const ResourceUUID uuid) : m_uuid(uuid) {}
 
 
     private:
         ResourceUUID m_uuid;
-        std::string m_format;
 
         // ========== Editor-only functionality ==========
 

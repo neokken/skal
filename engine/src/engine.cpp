@@ -5,12 +5,14 @@
 // ReSharper disable CppMemberFunctionMayBeConst
 #include "skal/engine.h"
 
+#include "glm/ext/matrix_clip_space.hpp"
 #include "skal/file_io/file_io.h"
 #include "skal/device/device.h"
 #include "skal/input/input.h"
 #include "skal/util/log.h"
 #include "skal/ecs/scene.h"
 #include "skal/ecs/scene_manager.h"
+#include "skal/math/math_constants.h"
 #include "skal/renderering/renderer.h"
 #include "skal/resource/resource_indexer.h"
 #include "skal/resource/resource_manager.h"
@@ -92,8 +94,12 @@ void skal::EngineClass::PostUpdate()
 void skal::EngineClass::RenderScene()
 {
     m_device->BeginFrame();
-    m_renderer->Render();
-    //TODO (okke):
+    FrameData frame;
+    frame.width = m_device->GetWidth();
+    frame.height = m_device->GetHeight();
+
+    frame.projection = glm::perspective(90.f, static_cast<float>(frame.width)/static_cast<float>(frame.height), 0.1f,100.f);
+    m_renderer->BeginFrame(frame);
 }
 
 void skal::EngineClass::RenderDebugUI()
@@ -103,6 +109,7 @@ void skal::EngineClass::RenderDebugUI()
 
 void skal::EngineClass::PresentFrame()
 {
+    m_renderer->EndFrame();
     m_device->EndFrame();
 }
 

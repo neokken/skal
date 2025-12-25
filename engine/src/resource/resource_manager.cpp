@@ -5,6 +5,7 @@
 #include "skal/resource/resource_manager.h"
 
 #include "skal/file_io/file_io.h"
+#include "skal/resource/asset_importer.h"
 #include "skal/resource/resource_interface.h"
 #include "skal/util/log.h"
 
@@ -60,44 +61,10 @@ namespace skal
         }
     }
 
-    IResource* ResourceManager::LoadFromDisk(const MetaResource &meta)
+    IResource* ResourceManager::LoadFromMeta(const MetaResource &meta)
     {
-        // Load data based on source type
-
-        if (std::holds_alternative<std::string>(meta.source))
-        {
-            // Load from file
-            const auto path = std::get<std::string>(meta.source);
-            const std::vector<uint8_t> data = Engine.FileIO().ReadBinaryFile(path);
-
-
-            return ResourceFactory::Create(meta.resourceType, meta.uuid, meta.format, data, path);
-        }
-        else if (std::holds_alternative<ResourceUUID>(meta.source))
-        {
-            // Embedded resource - load parent first
-            const auto parentUUID = std::get<ResourceUUID>(meta.source);
-
-            // Recursively load parent (which creates embedded resources)
-            Load<IResource>(parentUUID);
-
-            // Parent's constructor created this embedded resource
-            // Return it from cache
-            if (m_resources.find(meta.uuid) != m_resources.end())
-            {
-                return m_resources[meta.uuid].resource.get();
-            }
-
-            Log::Error("ResourceManager::LoadFromDisk - Parent loaded but embedded resource not found: {}", meta.uuid.to_string());
-            return nullptr;
-        }
-        else if (std::holds_alternative<PakLocation>(meta.source))
-        {
-            // Load from pak
-            return nullptr;
-        }
-
-        return nullptr;
+        const auto asset = skal::ImportAsset(meta);
+        return ResourceFactory::Create(meta.uuid, asset);
     }
 
     IResource* ResourceManager::GetRaw(const ResourceUUID uuid)

@@ -8,9 +8,11 @@
 
 #include <nlohmann/json.hpp>
 
+
+#if 0
+
 namespace skal
 {
-
 
     // currently Texture file is used for .png type
 struct TextureFile
@@ -18,7 +20,7 @@ struct TextureFile
     TextureDescriptor::ColorSpace color_space{TextureDescriptor::ColorSpace::Srgb};
     bool gen_mipmaps = false;
 
-    static TextureFile FromJSON(const nlohmann::json& j)
+    static TextureFile Deserialize(const nlohmann::json& j)
     {
         TextureFile desc;
 
@@ -30,7 +32,7 @@ struct TextureFile
         return desc;
     }
 
-    nlohmann::json ToJSON() const
+    nlohmann::json Serialize() const
     {
         nlohmann::json j;
         j["color_space"] = (color_space == TextureDescriptor::ColorSpace::Srgb) ? "srgb" : "unorm";
@@ -49,9 +51,9 @@ public:
 
     [[nodiscard]] ResourceType GetType() const override { return ResourceType::Texture; }
 
-    [[nodiscard]] RenderTextureHandle GetData() const { return m_textureHandle; }
 
 
+    RenderTextureHandle GetRenderHandle() const {return m_textureHandle;}
 
 
 protected:
@@ -66,3 +68,4 @@ private:
 };
 
 }
+#endif

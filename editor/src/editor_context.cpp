@@ -53,9 +53,9 @@ namespace editor
 
 
         skal::Project project{
-            .name = name,
-            .engine_version = SKAL_ENGINE_VERSION,
-            .entry_scene = defaultSceneUUID
+            name,
+            SKAL_ENGINE_VERSION,
+             defaultSceneUUID
         };
 
         const auto json = skal::SerializeProject(project);

@@ -6,9 +6,13 @@
 #include <skal/engine.h>
 
 #include "editor_context.h"
+#include "glm/detail/type_quat.hpp"
+#include "glm/ext/quaternion_trigonometric.hpp"
+#include "glm/gtc/quaternion.hpp"
 #include "skal/uuid_types.h"
 #include "skal/input/input.h"
 #include "skal/resource/resource_manager.h"
+#include "skal/resource/types/mesh_resource.h"
 #include "skal/resource/types/texture_resource.h"
 #include "skal/util/log.h"
 #include "utils/file_dialogue.h"
@@ -64,10 +68,12 @@ int main(const int argc, char **argv)
         return 1;
     }
 
-    // TODO (okke): test resource... remove this
-    skal::Engine.ResourceManager().Load<skal::Texture>(skal::ResourceUUID::from_string("656ca6d2-1b2d-4588-8a59-ec0c3c812744"));
-
     // == game loop ==
+
+    // TODO (okke) : temp code remove
+    auto mesh = skal::Engine.ResourceManager().Load<skal::Mesh>(skal::ResourceUUID::from_string("981f34b1-cc32-4bac-b094-6a2bbfb06ed3"));
+    float time{0};
+
 
     while (skal::Engine.ShouldRun())
     {
@@ -92,6 +98,23 @@ int main(const int argc, char **argv)
         skal::Engine.RenderScene();
         //editorCtx.RenderGizmos();
         //editorCtx.RenderUI();
+
+        time += 1/60.f;
+        if (mesh.IsValid())
+        {
+            skal::DrawCommand drawCommand;
+            drawCommand.mesh = mesh.Get()->GetRenderHandle();
+
+            glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, -2.f));
+            glm::quat angle = glm::angleAxis(glm::radians(time), glm::vec3(0.f, 1.f, 0.f));
+            angle = angle * glm::angleAxis(glm::radians(time*0.2f), glm::vec3(1,0.f,0.f));
+            transform = transform * glm::mat4_cast(angle); // note: translate * rotate
+            drawCommand.transform = transform;
+
+            skal::Engine.Renderer().Submit(drawCommand);
+        }
+
+
         skal::Engine.RenderDebugUI();
         skal::Engine.PresentFrame();
     }
