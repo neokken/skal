@@ -119,6 +119,7 @@ int main(const int argc, char **argv)
         skal::Engine.PresentFrame();
     }
 
+    mesh = {}; // TODO (okke) : remove just because
     skal::Engine.Shutdown();
     return 0;
 }

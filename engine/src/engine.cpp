@@ -58,12 +58,15 @@ void skal::EngineClass::LoadProject(const skal::Project &project)
 
 void skal::EngineClass::Shutdown()
 {
-    delete m_renderer;
     delete m_sceneManager;
+
+    m_resources->GarbageCollect();
     delete m_resources;
     delete m_indexer;
     delete m_input;
+
     delete m_device;
+    delete m_renderer;
 
     delete m_fileIO;
 }
