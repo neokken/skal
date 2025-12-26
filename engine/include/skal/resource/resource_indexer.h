@@ -23,10 +23,6 @@ namespace skal
         bool Exists(ResourceUUID uuid) const;
 
 
-#ifdef SKAL_EDITOR
-        static nlohmann::ordered_json SerializeMetaFile(const MetaResource& meta);
-#endif
-
     private:
         std::unordered_map<ResourceUUID, MetaResource> m_resources;
 

@@ -28,20 +28,6 @@ namespace skal
 
     private:
         ResourceUUID m_uuid;
-
-        // ========== Editor-only functionality ==========
-
-#ifdef SKAL_EDITOR
-        virtual bool SaveToFile(const std::string& path) { skal::Log::Warn("SaveToFile has not been implemented for this resource."); return false; }
-
-    public:
-        void MarkDirty() { m_dirty = true; }
-        bool Save();    // will save to the location its stored.
-        [[nodiscard]] bool IsDirty() const { return m_dirty; }
-
-    private:
-        bool m_dirty{false};
-#endif
     };
 
 }

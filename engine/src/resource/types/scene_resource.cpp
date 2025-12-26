@@ -14,13 +14,9 @@ void skal::SceneResource::Load(const ImportedAsset& asset)
 }
 
 
-#ifdef SKAL_EDITOR
 
 
 void skal::SceneResource::UpdateData(const nlohmann::json &data)
 {
     m_sceneData = data;
-    MarkDirty();
 }
-
-#endif

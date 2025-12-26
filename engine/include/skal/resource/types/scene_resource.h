@@ -22,11 +22,7 @@ namespace skal
 
         void Load(const ImportedAsset& asset) override;
 
-#ifdef SKAL_EDITOR
         void UpdateData(const nlohmann::json& data);
-
-        //bool SaveToFile(const std::string& path) override;
-#endif
 
     private:
         friend class ResourceFactory;

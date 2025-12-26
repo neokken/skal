@@ -173,30 +173,4 @@ namespace skal
         }
     }
 
-#ifdef SKAL_EDITOR
-
-    nlohmann::ordered_json ResourceIndexer::SerializeMetaFile(const MetaResource& meta)
-    {
-        nlohmann::ordered_json j;
-        j["uuid"] = meta.uuid.to_string();
-        j["type"] = ResourceTypeToString(meta.resourceType);
-        j["format"] = meta.format;
-
-        if (!meta.embeddedResources.empty())
-        {
-            j["embedded"] = nlohmann::json::array();
-            for (auto& e : meta.embeddedResources)
-            {
-                j["embedded"].push_back({
-                    {"uuid", e.uuid.to_string()},
-                    {"type", ResourceTypeToString(e.resourceType)},
-                    {"format", e.format},
-                    {"sub_path", e.subPath}
-                });
-            }
-        }
-
-        return j;
-    }
-#endif
 } // skal

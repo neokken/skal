@@ -76,10 +76,6 @@ namespace skal
 
         void GarbageCollect(); // Unload resources with refCount == 0
 
-#ifdef SKAL_EDITOR
-        void Reload(ResourceUUID uuid);
-#endif
-
     private:
         struct ResourceEntry
         {

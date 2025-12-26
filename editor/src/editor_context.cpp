@@ -36,23 +36,22 @@ namespace editor
 
 
 
-        const skal::ResourceUUID defaultSceneUUID = skal::UUIDGenerator::generate<skal::ResourceUUID>();
+        const auto defaultSceneUUID = skal::UUIDGenerator::generate<skal::ResourceUUID>();
 
         skal::Scene newScene{};
 
-        skal::MetaResource meta;
-        meta.uuid = defaultSceneUUID;
-        meta.resourceType = skal::ResourceType::Scene;
-        meta.format = "skal-scene-json";
+        nlohmann::ordered_json metaJson;
+        metaJson["uuid"] = defaultSceneUUID.to_string();
+        metaJson["type"] = skal::ResourceTypeToString(skal::ResourceType::Scene);
+        metaJson["format"] = "skal-scene-json";
 
 
-        const nlohmann::ordered_json metaJson = skal::ResourceIndexer::SerializeMetaFile(meta);
 
         skal::Engine.FileIO().WriteTextFile(projectPath + "/assets/scenes/default.scene", newScene.Serialize().dump(4));
         skal::Engine.FileIO().WriteTextFile(projectPath + "/assets/scenes/default.scene.meta", metaJson.dump(4));
 
 
-        skal::Project project{
+        const skal::Project project{
             name,
             SKAL_ENGINE_VERSION,
              defaultSceneUUID
