@@ -101,7 +101,11 @@ void skal::EngineClass::RenderScene()
     frame.width = m_device->GetWidth();
     frame.height = m_device->GetHeight();
 
-    frame.projection = glm::perspective(90.f, static_cast<float>(frame.width)/static_cast<float>(frame.height), 0.1f,100.f);
+    frame.near_plane = 0.1f;
+    frame.far_plane = 100.f;
+
+    frame.field_of_view_deg = 45.f;
+
     m_renderer->BeginFrame(frame);
 }
 

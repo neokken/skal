@@ -18,7 +18,7 @@
 
 namespace editor
 {
-    bool EditorContext::CreateProject(const std::string &basePath, const std::string &name)
+    bool EditorContext::CreateProject(const std::string& basePath, const std::string& name)
     {
         // creating base structure
         std::string projectPath = basePath + "/" + name;
@@ -43,7 +43,7 @@ namespace editor
         skal::MetaResource meta;
         meta.uuid = defaultSceneUUID;
         meta.resourceType = skal::ResourceType::Scene;
-        meta.format = "base";
+        meta.format = "skal-scene-json";
 
 
         const nlohmann::ordered_json metaJson = skal::ResourceIndexer::SerializeMetaFile(meta);
@@ -66,7 +66,7 @@ namespace editor
         return true;
     }
 
-    bool EditorContext::OpenProject(const std::string &path)
+    bool EditorContext::OpenProject(const std::string& path)
     {
         m_projectPath = path + "/project.skal";
         if (!skal::Engine.FileIO().Exists(m_projectPath))

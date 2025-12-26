@@ -8,7 +8,7 @@
 #include "glm/glm.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "skal/util/color_constants.h"
-
+#include <glm/gtc/quaternion.hpp>
 
 namespace skal
 {
@@ -32,22 +32,27 @@ namespace skal
         [[nodiscard]] bool valid() const { return id != 0; };
     };
 
-    struct TextureDescriptor
+    struct RenderFrameBufferHandle
     {
-        enum class ColorSpace { Unorm, Srgb } color_space;
-        bool generate_mipmaps;
+        uint32_t id{0};
+        [[nodiscard]] bool valid() const { return id != 0; };
     };
-
 
     struct FrameData
     {
         uint16_t width{0};
         uint16_t height{0};
 
+        RenderFrameBufferHandle frame_buffer{0};
+
         glm::vec4 clear_color{colors::dark_gray, 1.f};
 
-        glm::mat4 view{1.f};
-        glm::mat4 projection{1.f};
+        glm::vec3 camera_position{0.f, 0.f, 0.f};
+        glm::quat camera_rotation{};
+
+        float near_plane{0.f};
+        float far_plane{0.f};
+        float field_of_view_deg{45.f};
     };
 
     struct DrawCommand
@@ -58,6 +63,7 @@ namespace skal
 
 
 
+
     class Renderer {
     public:
         Renderer();
@@ -65,6 +71,9 @@ namespace skal
 
         RenderMeshHandle LoadMesh(const SkalMeshData& data);
         void UnloadMesh(RenderMeshHandle handle);
+
+        RenderFrameBufferHandle CreateFrameBuffer();
+        void DestroyFrameBuffer(RenderFrameBufferHandle handle);
 
        //RenderTextureHandle LoadTexture(const std::string& format, const std::vector<uint8_t>& data, const TextureDescriptor& desc);
        //void UnloadTexture(RenderTextureHandle handle);

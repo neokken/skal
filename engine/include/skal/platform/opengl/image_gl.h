@@ -7,6 +7,8 @@
 
 #include "skal/renderering/renderer.h"
 
+#if 0
+
 namespace skal::opengl
 {
     class Image
@@ -35,3 +37,4 @@ namespace skal::opengl
         int m_channels{-1};
     };
 }
+#endif

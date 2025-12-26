@@ -9,6 +9,8 @@
 
 #include "skal/util/log.h"
 
+#if 0
+
 skal::opengl::Image::~Image()
 {
     if (m_texture) glDeleteTextures(1, &m_texture);
@@ -106,3 +108,5 @@ void skal::opengl::Image::CreateGLTextureWithData(unsigned char* data, int width
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 }
+#endif
+

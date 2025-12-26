@@ -39,7 +39,7 @@ namespace skal
         void Submit(const DrawCommand& command);
 
         ResourcePool<opengl::Mesh> m_meshes;
-        ResourcePool<opengl::Image> m_textures;
+        //ResourcePool<opengl::Image> m_textures;
 
         uint32_t defaultShader{0};
     private:
@@ -74,6 +74,12 @@ namespace skal
     {
         glUseProgram(defaultShader);
 
+
+        glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), m_frameData.camera_position);
+        viewMatrix = viewMatrix * glm::mat4_cast(m_frameData.camera_rotation);
+
+        glm::mat4 projectionMatrix = glm::perspective(m_frameData.field_of_view_deg,m_frameData.width/static_cast<float>(m_frameData.height),m_frameData.near_plane,m_frameData.far_plane);
+
         for (const auto& cmd : m_drawCommands)
         {
             if (!cmd.mesh.valid()) continue;
@@ -90,8 +96,8 @@ namespace skal
             const GLint projLoc  = glGetUniformLocation(defaultShader, "u_Projection");
 
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(cmd.transform));
-            glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(m_frameData.view));
-            glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(m_frameData.projection));
+            glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+            glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
             glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->GetIndexCount()), GL_UNSIGNED_INT, 0);
         }
@@ -316,6 +322,17 @@ namespace skal
         if (!handle.valid()) return;
 
         m_impl->m_meshes.Free(handle.id);
+    }
+
+    RenderFrameBufferHandle Renderer::CreateFrameBuffer()
+    {
+        skal::Log::Error("Renderer::CreateFrameBuffer - not implemented");
+        return {};
+    }
+
+    void Renderer::DestroyFrameBuffer(RenderFrameBufferHandle handle)
+    {
+        skal::Log::Error("Renderer::DestroyFrameBuffer - not implemented");
     }
 
     void Renderer::BeginFrame(const FrameData& frameData)
