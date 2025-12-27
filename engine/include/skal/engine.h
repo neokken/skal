@@ -30,7 +30,7 @@ namespace skal
 
 
         void PreUpdate();           // Device/input
-        void Update();              // Scene logic
+        void GameUpdate();              // Scene logic
         void PostUpdate();          // Scene cleanup
 
         void RenderScene();

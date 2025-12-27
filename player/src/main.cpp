@@ -46,7 +46,7 @@ int main(const int argc, char **argv)
     while (skal::Engine.ShouldRun())
     {
         skal::Engine.PreUpdate();
-        skal::Engine.Update();
+        skal::Engine.GameUpdate();
         skal::Engine.PostUpdate();
 
         skal::Engine.RenderScene();

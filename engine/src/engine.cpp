@@ -83,14 +83,14 @@ void skal::EngineClass::PreUpdate()
     }
 }
 
-void skal::EngineClass::Update()
+void skal::EngineClass::GameUpdate()
 {
-
+    m_sceneManager->GetActiveScene()->Update();
 }
 
 void skal::EngineClass::PostUpdate()
 {
-    m_sceneManager->GetActiveScene()->Update();
+
 }
 
 

@@ -68,12 +68,6 @@ int main(const int argc, char **argv)
         return 1;
     }
 
-    // == game loop ==
-
-    // TODO (okke) : temp code remove
-    auto mesh = skal::Engine.ResourceManager().Load<skal::Mesh>(skal::ResourceUUID::from_string("981f34b1-cc32-4bac-b094-6a2bbfb06ed3"));
-    float time{0};
-
 
     while (skal::Engine.ShouldRun())
     {
@@ -81,45 +75,17 @@ int main(const int argc, char **argv)
 
         if (editor.GetPlayState() == editor::EditorContext::PlayState::Playing)
         {
-            skal::Engine.Update();
+            skal::Engine.GameUpdate();
         }
-
-
-        if (skal::Engine.Input().GetKeyDown(skal::input::KeyboardKey::Escape))
-        {
-            skal::Log::Info("Requesting Shutdown");
-            skal::Engine.RequestClose();
-        }
-
-
 
         skal::Engine.PostUpdate();
 
         skal::Engine.RenderScene();
-        //editorCtx.RenderGizmos();
-        //editorCtx.RenderUI();
-
-        time += 1/60.f;
-        if (mesh.IsValid())
-        {
-            skal::DrawCommand drawCommand;
-            drawCommand.mesh = mesh.Get()->GetRenderHandle();
-
-            glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, -2.f));
-            glm::quat angle = glm::angleAxis(glm::radians(time), glm::vec3(0.f, 1.f, 0.f));
-            angle = angle * glm::angleAxis(glm::radians(time*0.2f), glm::vec3(1,0.f,0.f));
-            transform = transform * glm::mat4_cast(angle); // note: translate * rotate
-            drawCommand.transform = transform;
-
-            skal::Engine.Renderer().Submit(drawCommand);
-        }
-
 
         skal::Engine.RenderDebugUI();
         skal::Engine.PresentFrame();
     }
 
-    mesh = {}; // TODO (okke) : remove just because
     skal::Engine.Shutdown();
     return 0;
 }
