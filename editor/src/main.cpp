@@ -6,11 +6,14 @@
 #include <skal/engine.h>
 
 #include "editor_context.h"
+#include "imgui.h"
 #include "glm/detail/type_quat.hpp"
 #include "glm/ext/quaternion_trigonometric.hpp"
 #include "glm/gtc/quaternion.hpp"
+#include "imgui/imgui_debug_ui.h"
 #include "skal/uuid_types.h"
 #include "skal/input/input.h"
+#include "skal/platform/sdl3/device/device_sdl3.h"
 #include "skal/resource/resource_manager.h"
 #include "skal/resource/types/mesh_resource.h"
 #include "skal/resource/types/texture_resource.h"
@@ -29,7 +32,8 @@ int main(const int argc, char **argv)
     {
         // Command line: editor.exe "C:/Projects/MyGame"    // full path, or it's appended to the working directory
         projectPath = argv[1];
-    } else
+    }
+    else
     {
         /// Show dialog with options
         const auto choice = editor::ShowProjectStartDialog();
@@ -68,10 +72,15 @@ int main(const int argc, char **argv)
         return 1;
     }
 
+    editor::ImGuiDebugUI ui = editor::ImGuiDebugUI(skal::Engine.Device().GetNativeWindowHandle());
+    skal::Engine.SetDebugUI(&ui);
+
+
 
     while (skal::Engine.ShouldRun())
     {
         skal::Engine.PreUpdate();
+        ui.BeginFrame();
 
         if (editor.GetPlayState() == editor::EditorContext::PlayState::Playing)
         {
@@ -82,7 +91,10 @@ int main(const int argc, char **argv)
 
         skal::Engine.RenderScene();
 
-        skal::Engine.RenderDebugUI();
+        ImGui::ShowDemoWindow();
+
+
+        ui.EndFrame();
         skal::Engine.PresentFrame();
     }
 

@@ -5,6 +5,8 @@
 #include "skal/platform/sdl3/device/device_sdl3.h"
 #include <SDL3/SDL.h>
 
+#include "skal/engine.h"
+#include "skal/util/debug_ui.h"
 #include "skal/util/log.h"
 
 
@@ -50,6 +52,14 @@ skal::Device::~Device()
     SDL_Quit();
 }
 
+NativeWindowHandle skal::Device::GetNativeWindowHandle() const
+{
+    NativeWindowHandle nativeWindowHandle;
+    nativeWindowHandle.glContext = m_glContext;
+    nativeWindowHandle.window = m_window;
+    return nativeWindowHandle;
+}
+
 void skal::Device::SetTitle(const std::string &title)
 {
     SDL_SetWindowTitle(m_window, title.c_str());
@@ -66,6 +76,9 @@ void skal::Device::Update()
             m_width = event.window.data1;
             m_height = event.window.data2;
         }
+
+        if (auto* ui = skal::Engine.GetDebugUI())
+            ui->ProcessSDLEvent(event);
     }
 
 }

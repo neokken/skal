@@ -10,6 +10,7 @@
 
 namespace skal
 {
+    struct IDebugUI;
     class Renderer;
     class SceneManager;
     class ResourceManager;
@@ -27,7 +28,7 @@ namespace skal
 
         void Shutdown();
 
-
+        void SetDebugUI(IDebugUI* ui);
 
         void PreUpdate();           // Device/input
         void GameUpdate();              // Scene logic
@@ -50,6 +51,8 @@ namespace skal
         [[nodiscard]] SceneManager& SceneManager() { return *m_sceneManager; }
         [[nodiscard]] Renderer& Renderer() { return *m_renderer; }
 
+        [[nodiscard]] IDebugUI* GetDebugUI() { return m_debugUI; }
+
         [[nodiscard]] const Project& GetProject() const;
     private:
         skal::Project m_project{};
@@ -63,7 +66,7 @@ namespace skal
 
         skal::SceneManager* m_sceneManager{nullptr};
         skal::Renderer* m_renderer{nullptr};
-
+        skal::IDebugUI* m_debugUI = nullptr;
 
     private:
         static void PrintBanner();

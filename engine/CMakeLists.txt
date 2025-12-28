@@ -29,8 +29,8 @@ add_library(glad STATIC extern/glad/src/glad.c)
 target_include_directories(glad PUBLIC extern/glad/include)
 
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-file(GLOB_RECURSE HEADERS "include/*.h")
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
+file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS "include/*.h")
 
 add_library(SkalEngine STATIC ${SOURCES} ${HEADERS})
 
@@ -43,8 +43,6 @@ target_compile_definitions(SkalEngine PUBLIC
         SKAL_SDL3
 
         GLM_ENABLE_EXPERIMENTAL
-
-        SKAL_EDITOR                 # TODO (okke): this should not be here
 )
 
 

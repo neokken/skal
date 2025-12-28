@@ -16,6 +16,7 @@
 #include "skal/renderering/renderer.h"
 #include "skal/resource/resource_indexer.h"
 #include "skal/resource/resource_manager.h"
+#include "skal/util/debug_ui.h"
 
 
 namespace skal
@@ -60,6 +61,12 @@ void skal::EngineClass::Shutdown()
 {
     delete m_sceneManager;
 
+    if (m_debugUI)
+    {
+        m_debugUI->Shutdown();
+    }
+
+
     m_resources->GarbageCollect();
     delete m_resources;
     delete m_indexer;
@@ -69,6 +76,17 @@ void skal::EngineClass::Shutdown()
     delete m_renderer;
 
     delete m_fileIO;
+}
+
+void skal::EngineClass::SetDebugUI(IDebugUI* ui)
+{
+    if (m_debugUI)
+        m_debugUI->Shutdown();
+
+    m_debugUI = ui;
+
+    if (m_debugUI)
+        m_debugUI->Initialize();
 }
 
 void skal::EngineClass::PreUpdate()
@@ -111,7 +129,9 @@ void skal::EngineClass::RenderScene()
 
 void skal::EngineClass::RenderDebugUI()
 {
-    //TODO (okke):
+    if (!m_debugUI) return;
+
+
 }
 
 void skal::EngineClass::PresentFrame()

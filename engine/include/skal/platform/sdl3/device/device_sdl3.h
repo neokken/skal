@@ -11,6 +11,15 @@
 
 class SDL_Window;
 
+
+
+struct NativeWindowHandle
+{
+    void* window;     // SDL_Window*
+    void* glContext;  // SDL_GLContext
+};
+
+
 namespace skal
 {
 
@@ -20,6 +29,7 @@ namespace skal
         Device(int width, int height);
         ~Device();
 
+        [[nodiscard]] NativeWindowHandle GetNativeWindowHandle() const;
 
         void SetTitle(const std::string& title);
 
