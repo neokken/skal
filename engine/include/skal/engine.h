@@ -5,6 +5,7 @@
 // ReSharper disable CppMemberFunctionMayBeConst
 #pragma once
 
+#include "renderering/renderer.h"
 #include "skal/project.h"
 
 
@@ -34,8 +35,7 @@ namespace skal
         void GameUpdate();              // Scene logic
         void PostUpdate();          // Scene cleanup
 
-        void RenderScene();
-        void RenderDebugUI();
+        void RenderScene(const FrameData* frameData = nullptr);
         void PresentFrame();
 
 

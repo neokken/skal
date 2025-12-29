@@ -66,13 +66,19 @@ namespace skal
 
     class Renderer {
     public:
-        Renderer();
         ~Renderer();
+
+        Renderer(const Renderer&) = delete;
+        Renderer& operator=(const Renderer&) = delete;
+
+        Renderer(Renderer&& other) noexcept  = delete;
+        Renderer& operator=(Renderer&& other) noexcept  = delete;
 
         RenderMeshHandle LoadMesh(const SkalMeshData& data);
         void UnloadMesh(RenderMeshHandle handle);
 
-        RenderFrameBufferHandle CreateFrameBuffer();
+        RenderFrameBufferHandle CreateFrameBuffer(uint32_t width, uint32_t height);
+        uint32_t GetTextureId(RenderFrameBufferHandle handle);
         void DestroyFrameBuffer(RenderFrameBufferHandle handle);
 
        //RenderTextureHandle LoadTexture(const std::string& format, const std::vector<uint8_t>& data, const TextureDescriptor& desc);
@@ -88,6 +94,8 @@ namespace skal
         void Submit(const DrawCommand& command);
 
     private:
+        Renderer();
+        friend class EngineClass;
 
         class RendererImpl;
         std::unique_ptr<RendererImpl> m_impl;

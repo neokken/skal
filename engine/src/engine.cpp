@@ -48,8 +48,9 @@ void skal::EngineClass::LoadProject(const skal::Project &project)
 
     if (m_project.engine_version != SKAL_ENGINE_VERSION)
     {
-        skal::Log::Error("EngineClass::LoadProject - Project was created with engine v{}, running v{}", m_project.engine_version,
-                        SKAL_ENGINE_VERSION);
+        skal::Log::Error("EngineClass::LoadProject - Project was created with engine v{}, running v{}",
+                         m_project.engine_version,
+                         SKAL_ENGINE_VERSION);
     }
 
     // Load entry scene
@@ -78,7 +79,7 @@ void skal::EngineClass::Shutdown()
     delete m_fileIO;
 }
 
-void skal::EngineClass::SetDebugUI(IDebugUI* ui)
+void skal::EngineClass::SetDebugUI(IDebugUI *ui)
 {
     if (m_debugUI)
         m_debugUI->Shutdown();
@@ -108,35 +109,40 @@ void skal::EngineClass::GameUpdate()
 
 void skal::EngineClass::PostUpdate()
 {
-
 }
 
-
-void skal::EngineClass::RenderScene()
+void skal::EngineClass::RenderScene(const FrameData *frameData)
 {
     m_device->BeginFrame();
-    FrameData frame;
-    frame.width = m_device->GetWidth();
-    frame.height = m_device->GetHeight();
 
-    frame.near_plane = 0.1f;
-    frame.far_plane = 100.f;
+    FrameData final_frame_data;
 
-    frame.field_of_view_deg = 45.f;
+    if (frameData)
+    {
+        final_frame_data = *frameData;
+    }
+    else
+    {
+        final_frame_data.width = m_device->GetWidth();
+        final_frame_data.height = m_device->GetHeight();
 
-    m_renderer->BeginFrame(frame);
+        final_frame_data.near_plane = 0.1f;
+        final_frame_data.far_plane = 100.f;
+
+        final_frame_data.field_of_view_deg = 45.f;
+    }
+
+
+    m_renderer->BeginFrame(final_frame_data);
 }
 
-void skal::EngineClass::RenderDebugUI()
-{
-    if (!m_debugUI) return;
 
 
-}
 
 void skal::EngineClass::PresentFrame()
 {
     m_renderer->EndFrame();
+    if (m_debugUI) m_debugUI->EndFrame();
     m_device->EndFrame();
 }
 

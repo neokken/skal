@@ -75,6 +75,7 @@ int main(const int argc, char **argv)
     editor::ImGuiDebugUI ui = editor::ImGuiDebugUI(skal::Engine.Device().GetNativeWindowHandle());
     skal::Engine.SetDebugUI(&ui);
 
+    auto buffer = skal::Engine.Renderer().CreateFrameBuffer(1024, 768);
 
 
     while (skal::Engine.ShouldRun())
@@ -89,12 +90,39 @@ int main(const int argc, char **argv)
 
         skal::Engine.PostUpdate();
 
-        skal::Engine.RenderScene();
+        ImGui::Begin("Viewport");
+        ImVec2 viewport_size = ImGui::GetContentRegionAvail();
+
+        if (viewport_size.x > 0 && viewport_size.y > 0) {
+            uint32_t texture_id = skal::Engine.Renderer().GetTextureId(buffer);
+            ImGui::Image(
+            reinterpret_cast<void*>(static_cast<uintptr_t>(texture_id)),
+                viewport_size,
+                ImVec2(0, 1), // UV top-left (flipped for OpenGL)
+                ImVec2(1, 0)  // UV bottom-right
+            );
+        }
+
+        ImGui::End();
+
+        if (viewport_size.x > 0 && viewport_size.y > 0)
+        {
+            skal::FrameData frameData;
+            frameData.frame_buffer = buffer;
+            frameData.width = static_cast<uint16_t>(viewport_size.x);
+            frameData.height = static_cast<uint16_t>(viewport_size.y);
+            frameData.clear_color = glm::vec4(skal::colors::lime, 1.f);
+            skal::Engine.RenderScene(&frameData);
+        }
+        else
+        {
+            skal::Engine.RenderScene();
+        }
+
 
         ImGui::ShowDemoWindow();
 
 
-        ui.EndFrame();
         skal::Engine.PresentFrame();
     }
 

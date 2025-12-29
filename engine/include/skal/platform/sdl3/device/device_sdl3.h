@@ -26,7 +26,6 @@ namespace skal
     class Device {      //https://github.com/BredaUniversityGames/xs/blob/main/code/sdl3/device_sdl.cpp take a look
     public:
         Device() = delete;
-        Device(int width, int height);
         ~Device();
 
         [[nodiscard]] NativeWindowHandle GetNativeWindowHandle() const;
@@ -53,6 +52,9 @@ namespace skal
 
 
     private:
+        Device(int width, int height);
+        friend class EngineClass;
+
         SDL_Window* m_window = nullptr;
         SDL_GLContext m_glContext = nullptr;        // TODO (okke): hard ref to opengL?
 
