@@ -50,8 +50,8 @@ namespace skal
         glm::vec3 camera_position{0.f, 0.f, 0.f};
         glm::quat camera_rotation{};
 
-        float near_plane{0.f};
-        float far_plane{0.f};
+        float near_plane{0.1f};
+        float far_plane{1000.f};
         float field_of_view_deg{45.f};
     };
 
