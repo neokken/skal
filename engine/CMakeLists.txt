@@ -32,6 +32,16 @@ target_include_directories(glad PUBLIC extern/glad/include)
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS "include/*.h")
 
+list(APPEND SOURCES
+        extern/imgui/imgui.cpp
+        extern/imgui/imgui_draw.cpp
+        extern/imgui/imgui_widgets.cpp
+        extern/imgui/imgui_demo.cpp
+        extern/imgui/imgui_tables.cpp
+        extern/imgui/backends/imgui_impl_sdl3.cpp
+        extern/imgui/backends/imgui_impl_opengl3.cpp
+)
+
 add_library(SkalEngine STATIC ${SOURCES} ${HEADERS})
 
 
@@ -49,6 +59,8 @@ target_compile_definitions(SkalEngine PUBLIC
 target_include_directories(SkalEngine PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/extern/stb
+        ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui
+        ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/backends
 )
 
 target_link_libraries(SkalEngine PUBLIC

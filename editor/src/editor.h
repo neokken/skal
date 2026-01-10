@@ -8,7 +8,7 @@
 
 #include "editor_stuff/stats_panel.h"
 #include "editor_stuff/viewport.h"
-#include "imgui/imgui_debug_ui.h"
+#include "skal/platform/sdl3/imgui_debug_ui.h"
 #include "skal/renderering/renderer.h"
 
 

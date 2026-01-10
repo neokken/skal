@@ -2,7 +2,7 @@
 // Created by okker on 28/12/2025.
 //
 
-#include "imgui_debug_ui.h"
+#include "skal/platform/sdl3/imgui_debug_ui.h"
 
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
