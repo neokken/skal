@@ -43,6 +43,7 @@ skal::Device::Device(const int width, const int height) :   // TODO (okke): Shou
     SDL_GL_MakeCurrent(m_window, m_glContext);
 
     m_shouldClose = false;
+    SDL_GL_SetSwapInterval(0);
 }
 
 skal::Device::~Device()

@@ -54,6 +54,10 @@ namespace skal
         [[nodiscard]] IDebugUI* GetDebugUI() { return m_debugUI; }
 
         [[nodiscard]] const Project& GetProject() const;
+
+        [[nodiscard]] float GetRawDeltaTime() const {return m_rawDeltaTime;}
+        [[nodiscard]] float GetDeltaTime() const {return m_deltaTime;}
+
     private:
         skal::Project m_project{};
         bool m_projectLoaded{false};
@@ -67,6 +71,14 @@ namespace skal
         skal::SceneManager* m_sceneManager{nullptr};
         skal::Renderer* m_renderer{nullptr};
         skal::IDebugUI* m_debugUI = nullptr;
+
+
+        std::chrono::time_point<std::chrono::steady_clock> m_lastTime; // std::chrono::system_clock for pros
+
+        void CalculateDeltaTime();
+
+        float m_rawDeltaTime{0.f};       // actual frame time, unclamped
+        float m_deltaTime{0.f};          // clamped for gameplay safety
 
     private:
         static void PrintBanner();

@@ -30,6 +30,7 @@ namespace editor
         std::filesystem::create_directories(projectPath + "/assets/models");
         std::filesystem::create_directories(projectPath + "/assets/textures");
         std::filesystem::create_directories(projectPath + "/.editor");
+        std::filesystem::create_directories(projectPath + "/editor");
 
         // copy engine assets  TODO (okke): but copy instead to here
         std::filesystem::create_directories(projectPath + "/assets/engine");

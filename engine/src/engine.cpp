@@ -54,7 +54,6 @@ void skal::EngineClass::LoadProject(const skal::Project &project)
     }
 
     // Load entry scene
-
     m_sceneManager->LoadScene(project.entry_scene);
 }
 
@@ -92,6 +91,7 @@ void skal::EngineClass::SetDebugUI(IDebugUI *ui)
 
 void skal::EngineClass::PreUpdate()
 {
+    CalculateDeltaTime();
     m_device->Update();
     m_input->Update();
 
@@ -160,6 +160,16 @@ const skal::Project &skal::EngineClass::GetProject() const
 {
     assert(m_projectLoaded && "LoadProject must be called before accessing project");
     return m_project;
+}
+
+void skal::EngineClass::CalculateDeltaTime()
+{
+    const auto current = std::chrono::high_resolution_clock::now();
+    const auto elapsed = current - m_lastTime;
+
+    m_rawDeltaTime = std::chrono::duration<float>(elapsed).count();
+    m_lastTime = current;
+    m_deltaTime = std::min(m_rawDeltaTime, 1.f / 30.f);  // cap at 30fps
 }
 
 void skal::EngineClass::PrintBanner()

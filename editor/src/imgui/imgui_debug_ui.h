@@ -13,6 +13,7 @@ namespace editor
     class ImGuiDebugUI final : public skal::IDebugUI
     {
     public:
+        ImGuiDebugUI() = delete;
         explicit ImGuiDebugUI(const NativeWindowHandle& handle);
 
         void Initialize() override;
